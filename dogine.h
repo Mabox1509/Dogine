@@ -79,12 +79,11 @@ namespace Dogine
 	};
 	class Texture
 	{
+		GLuint id;
 		unsigned int* buffer;
 		int w, h;
 
 	public:
-		GLuint id;
-
 		Texture(int _w, int _h, GLenum _slot, GLuint _filter, GLuint _warp);
 		~Texture();
 
@@ -158,6 +157,23 @@ namespace Dogine
 
 		void Rotate(glm::vec3 _angle);
 		glm::mat4 Matrix(glm::mat4 _object, float _aspect);
+	};
+	class Surface
+	{
+	private:
+		//[ID's]
+		GLuint id;
+		GLuint color_id;
+		GLuint depth_id;
+		GLuint stencil_id;
+
+	public:
+		//[VARIABLES]
+
+
+
+		//[FUNCTIONS]
+
 	};
 	#pragma endregion
 
