@@ -1,0 +1,137 @@
+//[INCLUDES]
+#include "pch.h"
+#include "framework.h"
+#include "dogine.h"
+
+#include <thread>
+
+
+//[VARIABLES]
+GLFWwindow* main_window;
+int width, height;
+
+bool should_close;
+int exit_code;
+
+
+
+//[NAMESPACE]
+namespace Dogine
+{
+    //[VARIABLES]
+    std::function<void()> on_start;
+
+    std::function<void(double _dt)> on_update;
+    std::function<void(double _dt)> on_draw;
+    std::function<void(double _dt)> on_gui;
+
+    int target_framerate;
+
+
+
+	//[FUNCTIONS]
+	void Init(int _w, int _h, const char* _title = __FILE__)
+	{
+        target_framerate = 60;
+        width = _w;
+        height = _h;
+
+        Log::Message("Loading GLFW...");
+        glfwInit();
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+
+        Log::Message("Creating window...");
+        main_window = glfwCreateWindow(width, height, _title, NULL, NULL);
+        if (main_window == NULL)
+        {
+            Log::Error("Failed to create GLFW window");
+            glfwTerminate();
+            exit(-1);
+        }
+        glfwMakeContextCurrent(main_window);
+        gladLoadGL();
+
+
+        glViewport(0, 0, width, height);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
+        CenterWindow();
+
+        on_start();
+        double _prev_frame = glfwGetTime();
+        should_close = false;
+
+        //GAME LOOP
+        while (!glfwWindowShouldClose(main_window))
+        {
+            if (should_close)
+                break;
+
+           
+            double _current_frame = glfwGetTime();
+            double _delta_time = _current_frame - _prev_frame;
+            _prev_frame = _current_frame;
+
+
+            //UPDATE
+            on_update(_delta_time);
+
+
+
+            //RENDER
+            on_draw(_delta_time);
+            on_gui(_delta_time);
+            glfwSwapBuffers(main_window);
+            //TAKE CARE OF GLFW EVENTS
+            glfwPollEvents();
+        }
+
+
+        glfwDestroyWindow(main_window);
+        glfwTerminate();
+        exit(exit_code);
+	}
+    void End(int _code)
+    {
+        should_close = true;
+        exit_code = _code;
+    }
+
+    GLFWwindow* GetWindow()
+    {
+        return main_window;
+    }
+    int GetWindowWidth()
+    {
+        return width;
+    }
+    int GetWindowHeigth()
+    {
+        return height;
+    }
+    void SetWindowSize(int _w, int _h)
+    {
+        width = _w;
+        height = _h;
+
+        glfwSetWindowSize(main_window, width, height);
+    }
+    void CenterWindow()
+    {
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        int screenWidth = mode->width;
+        int screenHeight = mode->height;
+        int xPos = (screenWidth - width) / 2;
+        int yPos = (screenHeight - height) / 2;
+        glfwSetWindowPos(main_window, xPos, yPos);
+    }
+    void SetWindowName(const char* _title)
+    {
+        glfwSetWindowTitle(main_window, _title);
+    }
+}
