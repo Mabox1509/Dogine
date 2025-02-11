@@ -4,6 +4,8 @@
 #include "dogine.h"
 
 #include <thread>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 //[VARIABLES]
@@ -19,14 +21,16 @@ int exit_code;
 namespace Dogine
 {
     //[VARIABLES]
+    Mesh* render_quad;
+
     std::function<void()> on_start;
 
     std::function<void(double _dt)> on_update;
-    std::function<void(double _dt)> on_draw;
-    std::function<void(double _dt)> on_gui;
+    std::function<void(double _dt, int _w, int _h)> on_draw;
+    std::function<void(double _dt, int _w, int _h, GLuint _output)> on_postdraw;
 
     int target_framerate;
-
+    Surface* application_surface;
 
 
 	//[FUNCTIONS]
@@ -42,6 +46,7 @@ namespace Dogine
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 
         Log::Message("Creating window...");
@@ -62,10 +67,19 @@ namespace Dogine
         glCullFace(GL_FRONT);
         CenterWindow();
 
+        application_surface = new Surface(width, height);
+
+
+        ResourcesInit();
         on_start();
         double _prev_frame = glfwGetTime();
         should_close = false;
 
+
+
+
+
+        Log::Message("========GAME LOOP========");
         //GAME LOOP
         while (!glfwWindowShouldClose(main_window))
         {
@@ -84,12 +98,18 @@ namespace Dogine
 
 
             //RENDER
-            on_draw(_delta_time);
-            on_gui(_delta_time);
+            application_surface->Bind();
+            on_draw(_delta_time, application_surface->GetWidth(), application_surface->GetHeight());
+            application_surface->Unbind();
+
+            
+
+            on_postdraw(_delta_time, width, height, application_surface->color_id);
             glfwSwapBuffers(main_window);
             //TAKE CARE OF GLFW EVENTS
             glfwPollEvents();
         }
+        Log::Message("========GAME END========");
 
 
         glfwDestroyWindow(main_window);

@@ -161,19 +161,23 @@ namespace Dogine
 	class Surface
 	{
 	private:
-		//[ID's]
+		//[VARIABLES]
+		int w, h;
+
+	public:
 		GLuint id;
 		GLuint color_id;
 		GLuint depth_id;
-		GLuint stencil_id;
-
-	public:
-		//[VARIABLES]
-
-
 
 		//[FUNCTIONS]
+		Surface(int _w, int _h);
+		~Surface();
 
+		void Bind();
+		void Unbind();
+
+		int GetWidth();
+		int GetHeight();
 	};
 	#pragma endregion
 
@@ -184,10 +188,12 @@ namespace Dogine
 	extern std::function<void()> on_start;
 
 	extern std::function<void(double _dt)> on_update;
-	extern std::function<void(double _dt)> on_draw;
-	extern std::function<void(double _dt)> on_gui;
+	extern std::function<void(double _dt, int _w, int _h)> on_draw;
+	extern std::function<void(double _dt, int _w, int _h, GLuint _output)> on_postdraw;
 
 	extern int target_framerate;
+
+	extern Surface* application_surface;
 	#pragma endregion
 
 

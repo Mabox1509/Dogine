@@ -198,6 +198,7 @@
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\resources.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\surface.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\VAO.cpp" />
     <ClCompile Include="src\VBO.cpp" />
