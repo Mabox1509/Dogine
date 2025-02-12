@@ -9,7 +9,7 @@
 namespace Dogine
 {
     //[CLASS]
-    Texture::Texture(int _w, int _h, GLenum _slot, GLuint _filter = GL_LINEAR, GLuint _warp = GL_REPEAT)
+    Texture::Texture(int _w, int _h, GLuint _filter = GL_LINEAR, GLuint _warp = GL_REPEAT)
     {
         //ALLOC RAM BUFFER
         size_t _size = (_w * _h) * sizeof(int);
@@ -22,7 +22,7 @@ namespace Dogine
 
         //ALLOC VRAM
         glGenTextures(1, &id);
-        glActiveTexture(_slot);
+        glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, id);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _filter);
@@ -57,8 +57,9 @@ namespace Dogine
     }
 
 
-    void Texture::Bind()
+    void Texture::Bind(GLuint _slot)
     {
+        glActiveTexture(GL_TEXTURE0 + _slot);
         glBindTexture(GL_TEXTURE_2D, id);
     }
     void Texture::Unbind()
@@ -85,7 +86,7 @@ namespace Dogine
     }
     void Texture::Apply()
     {
-        Bind();
+        Bind(1);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         glGenerateMipmap(GL_TEXTURE_2D);

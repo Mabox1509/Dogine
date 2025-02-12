@@ -162,7 +162,7 @@ namespace Dogine
 		bool _interpolation = _decompress[11];
 
 		//DUMP DATA
-		auto _texture = std::make_shared<Texture>(_w, _h, GL_TEXTURE0, _interpolation ? GL_LINEAR : GL_NEAREST, _repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
+		auto _texture = std::make_shared<Texture>(_w, _h, _interpolation ? GL_LINEAR : GL_NEAREST, _repeat ? GL_REPEAT : GL_CLAMP_TO_EDGE);
 		for (int _y = 0; _y < _h; _y++)
 		{
 			for (int _x = 0; _x < _w; _x++)
@@ -315,5 +315,9 @@ namespace Dogine
 		//Return
 		meshes[_name] = _mesh;
 		return _mesh;
+	}
+	std::vector<char> LoadRaw(std::string _name)
+	{
+		return GetFile(_name);
 	}
 }

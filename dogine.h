@@ -84,12 +84,12 @@ namespace Dogine
 		int w, h;
 
 	public:
-		Texture(int _w, int _h, GLenum _slot, GLuint _filter, GLuint _warp);
+		Texture(int _w, int _h, GLuint _filter, GLuint _warp);
 		~Texture();
 
 		void TexUnit(Shader& _shader, const char* _uniform, GLuint unit);
 
-		void Bind();
+		void Bind(GLuint _slot);
 		void Unbind();
 
 
@@ -167,7 +167,7 @@ namespace Dogine
 	public:
 		GLuint id;
 		GLuint color_id;
-		GLuint depth_id;
+		GLuint render_id;
 
 		//[FUNCTIONS]
 		Surface(int _w, int _h);
@@ -218,6 +218,7 @@ namespace Dogine
 	std::shared_ptr<Texture> LoadTexture(std::string _name);
 	std::shared_ptr<Mesh> LoadMesh(std::string _name);
 	std::shared_ptr<Shader> LoadShader(std::string _name);
+	std::vector<char> LoadRaw(std::string _name);
 	#pragma endregion
 }
 #endif // !_DOGINE_H

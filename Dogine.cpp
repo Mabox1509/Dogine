@@ -21,8 +21,6 @@ int exit_code;
 namespace Dogine
 {
     //[VARIABLES]
-    Mesh* render_quad;
-
     std::function<void()> on_start;
 
     std::function<void(double _dt)> on_update;
@@ -30,7 +28,7 @@ namespace Dogine
     std::function<void(double _dt, int _w, int _h, GLuint _output)> on_postdraw;
 
     int target_framerate;
-    Surface* application_surface;
+    Surface* application_surface = nullptr;
 
 
 	//[FUNCTIONS]
@@ -67,8 +65,6 @@ namespace Dogine
         glCullFace(GL_FRONT);
         CenterWindow();
 
-        application_surface = new Surface(width, height);
-
 
         ResourcesInit();
         on_start();
@@ -98,12 +94,20 @@ namespace Dogine
 
 
             //RENDER
+            if(application_surface == nullptr)
+            {
+                Log::Error("No application surface");
+            }
             application_surface->Bind();
+            glViewport(0, 0, application_surface->GetWidth(), application_surface->GetHeight());
+            glEnable(GL_DEPTH_TEST);
             on_draw(_delta_time, application_surface->GetWidth(), application_surface->GetHeight());
             application_surface->Unbind();
 
-            
 
+
+            glViewport(0, 0, width, height);
+            glDisable(GL_DEPTH_TEST);
             on_postdraw(_delta_time, width, height, application_surface->color_id);
             glfwSwapBuffers(main_window);
             //TAKE CARE OF GLFW EVENTS
