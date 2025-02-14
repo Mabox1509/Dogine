@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <unordered_map>
 
 
 #include <glad/glad.h>
@@ -65,6 +66,9 @@ namespace Dogine
 	//[RESOURCES]
 	class Shader
 	{
+	private:
+		std::unordered_map<std::string, GLuint> uniforms;
+
 	public:
 		//[VARIABLES]
 		GLuint shader_id;
@@ -76,6 +80,51 @@ namespace Dogine
 		//[FUNCTIONS]
 		void Activate();
 		void Delete();
+
+
+		//[UNIFORMS]
+		void Set1F(std::string _name, GLfloat _v0);
+		void Set2F(std::string _name, GLfloat _v0, GLfloat _v1);
+		void Set3F(std::string _name, GLfloat _v0, GLfloat _v1, GLfloat _v2);
+		void Set4F(std::string _name, GLfloat _v0, GLfloat _v1, GLfloat _v2, GLfloat _v3);
+
+		void Set1I(std::string _name, GLint _v0);
+		void Set2I(std::string _name, GLint _v0, GLint _v1);
+		void Set3I(std::string _name, GLint _v0, GLint _v1, GLint _v2);
+		void Set4I(std::string _name, GLint _v0, GLint _v1, GLint _v2, GLint _v3);
+
+
+		void Set1UI(std::string _name, GLuint _v0);
+		void Set2UI(std::string _name, GLuint _v0, GLuint _v1);
+		void Set3UI(std::string _name, GLuint _v0, GLuint _v1, GLuint _v2);
+		void Set4UI(std::string _name, GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
+	
+		void Set1Fv(std::string _name, GLsizei _count, const GLfloat* _value);
+		void Set2Fv(std::string _name, GLsizei _count, const GLfloat* _value);
+		void Set3Fv(std::string _name, GLsizei _count, const GLfloat* _value);
+		void Set4Fv(std::string _name, GLsizei _count, const GLfloat* _value);
+
+		void Set1Iv(std::string _name, GLsizei _count, const GLint* _value);
+		void Set2Iv(std::string _name, GLsizei _count, const GLint* _value);
+		void Set3Iv(std::string _name, GLsizei _count, const GLint* _value);
+		void Set4Iv(std::string _name, GLsizei _count, const GLint* _value);
+
+		void Set1UIv(std::string _name, GLsizei _count, const GLuint* _value);
+		void Set2UIv(std::string _name, GLsizei _count, const GLuint* _value);
+		void Set3UIv(std::string _name, GLsizei _count, const GLuint* _value);
+		void Set4UIv(std::string _name, GLsizei _count, const GLuint* _value);
+
+		void SetMatrix2Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix3Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix4Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+
+		void SetMatrix2x3Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix3x2Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix2x4Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix4x2Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix3x4Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+		void SetMatrix4x3Fv(std::string _name, GLsizei _count, GLboolean _transpose, const GLfloat* _value);
+
 	};
 	class Texture
 	{
@@ -156,7 +205,7 @@ namespace Dogine
 		Camera(glm::vec3 _position, float _fov, float _near, float _far);
 
 		void Rotate(glm::vec3 _angle);
-		glm::mat4 Matrix(glm::mat4 _object, float _aspect);
+		glm::mat4 Matrix(float _aspect);
 	};
 	class Surface
 	{

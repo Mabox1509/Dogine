@@ -34,7 +34,7 @@ namespace Dogine
 		orientation = glm::mat3(rotation) * orientation;
 		up = glm::mat3(rotation) * up;
 	}
-	glm::mat4 Camera::Matrix(glm::mat4 _object, float _aspect)
+	glm::mat4 Camera::Matrix(float _aspect)
 	{
 		glm::mat4 _view = glm::mat4(1.0f);
 		glm::mat4 _proj = glm::mat4(1.0f);
@@ -47,6 +47,6 @@ namespace Dogine
 
 
 		//OUT VALUE
-		return _proj * _view * _object;
+		return _proj * _view;
 	}
 }

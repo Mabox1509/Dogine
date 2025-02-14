@@ -5,6 +5,11 @@
 #include <cerrno>
 
 
+
+//[SLOTS TABLE]
+GLuint slots[32] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
+
+
 //[NAMESPACE]
 namespace Dogine
 {
@@ -59,8 +64,14 @@ namespace Dogine
 
     void Texture::Bind(GLuint _slot)
     {
+        if(slots[_slot] == id)
+        {
+            return;
+        }
+
         glActiveTexture(GL_TEXTURE0 + _slot);
         glBindTexture(GL_TEXTURE_2D, id);
+        slots[_slot] = id;
     }
     void Texture::Unbind()
     {
