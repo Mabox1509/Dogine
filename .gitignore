@@ -1,0 +1,10 @@
+# Ignorar todos los archivos objeto
+*.o
+
+# Ignorar carpeta de tests del compilador
+compiler/test/
+
+# Ignorar bins del compilador y librería
+compiler/bin/
+library/bin/
+

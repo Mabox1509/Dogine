@@ -1,0 +1,156 @@
+Dolang:
+--------------------
+Nombre: Dolang
+Versión: 0.1
+
+
+
+Objetivo del Lenguaje:
+-----------------------
+- Lenguaje de ejecución JIT.
+- Nivel medio, con sintaxis inspirada en C++ y GML.
+- Enfocado en lógica de videojuegos y scripting interno del motor.
+
+
+
+
+Tipos de Datos:
+---------------
+// Enteros sin signo
+- u8             // Entero de 8 bits sin signo
+- u16            // Entero de 16 bits sin signo
+- u32            // Entero de 32 bits sin signo
+- u64            // Entero de 64 bits sin signo
+
+// Enteros con signo
+- i8             // Entero de 8 bits con signo
+- i16            // Entero de 16 bits con signo
+- i32            // Entero de 32 bits con signo
+- i64            // Entero de 64 bits con signo
+
+// Reales
+- float          // Punto flotante de 32 bits
+- double         // Punto flotante de 64 bits
+
+// Texto
+- string         // Cadena de texto UTF-8 o ASCII (especificar)
+
+// Extra
+- bool           // Booleano (0 o 1)
+- vec2/vec3      // Vectores de 2 o 3 componentes
+- object         // Referencia a una objeto en el motor
+- dict<key, val> //Un diccionario hash
+- (any)[]        //Array (internamente son array list)
+
+
+Definiciones:
+-------------
+typedef struct my_struct
+{
+    u8 a;
+    bool b;
+    u8[] buffer;
+};
+typedef object my_obect
+{
+    public global : my_obect instance; //Esta variable es un estatico
+
+    public: vec2 velocidad;
+    private: i32 counter;
+    protected : string texto;
+
+    func<> update(){}
+    func<i32> calculate(i32 a, i32 b)
+    {
+        return a + b;
+    }
+};
+
+typedef object other_obj : my_obect
+{
+
+    override func<> update()
+    {
+        base.update();
+
+        //Esta funcion sobre escribe el padre;
+    }
+};
+
+
+Estructuras de Control:
+-----------------------
+- if (condición) { ... }
+- else { ... }
+- while (condición) { ... }
+- for (inicialización; condición; incremento) { ... }
+- return valor;
+
+
+Semántica de Tipos:
+-------------------
+- `typedef struct Nombre` define un nuevo tipo por valor.
+- `typedef object Nombre` define un nuevo tipo por referencia (puntero internamente).
+- Todos los objetos en Dolang se manejan internamente como punteros.
+- Asignar un objeto a otro no copia sus datos, solo la referencia.
+- Comparar dos objetos (`==`) compara sus referencias (no su contenido).
+
+
+Definición de Variables:
+------------------------
+Sintaxis:
+    tipo nombre = valor;
+
+Ejemplos:
+    int health = 100;
+    vec3 pos = vec3(0.0, 1.0, 0.0);
+    i8[] buffer = i8[256]; //Crea un array de 256 entradas
+
+
+Funciones:
+----------
+Sintaxis:
+    func<type> nombre_función(parámetros) {
+        // cuerpo
+    }
+
+Ejemplo:
+    void onUpdate(float dt) {
+        pos.y -= 9.8 * dt;
+    }
+
+
+
+Operadores Soportados:
+-----------------------
+Aritméticos: +, -, *, /, %, +=, -=, *=, /=
+Lógicos:     &&, ||, !
+Comparación: ==, !=, <, <=, >, >=
+
+Comentarios:
+------------
+Una línea:        // comentario
+Múltiples líneas: /* comentario */
+
+
+
+
+
+
+
+
+
+
+
+
+
+Funciones Nativas del Motor:
+----------------------------
+// Funciones de debug
+- debug_message(string message) => undefined
+- debug_warning(string message) => undefined
+- debug_error(string message) => undefined
+- debug_popup(string title, string message) => undefined
+
+- object_spawn<type>(i32 x, i32 y) => object
+- object_spawn(object instance) => undefined
